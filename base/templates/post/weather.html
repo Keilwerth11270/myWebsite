@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- https://www.youtube.com/watch?v=MIYQR-Ybrn4 Followed this tutorial, didn't really add anything because I wanted to move on to something new. -->
+
+    <!-- meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <meta charset="utf-8">
+    <!-- fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&family=Russo+One&display=swap" rel="stylesheet">
+    <!-- css connection -->
+    <link rel="stylesheet" href="http://fahimbashar.com/staticfiles/css/weatherstyle.css">
+    
+<title>Weather</title>
+</head>
+<body>
+
+<div class="card">
+    <div class="search">
+        <input type="text" placeholder="City Name" spellcheck="false">
+        <button><img src="http://fahimbashar.com/staticfiles/images/icons/search.png"></button>
+    </div>
+
+    <div class="weather">
+        <img src="http://fahimbashar.com/staticfiles/images/icons/rain.png" class = "weather-icon">
+        <h1 class="temp">22°C</h1>
+        <h2 class="city">New York, US</h2>
+        <div class="details">
+            <div class="col">
+                <img src="http://fahimbashar.com/staticfiles/images/icons/humidity.png">
+                <div>
+                    <p class="humidity">50%</p>
+                    <p>Humidity</p>
+                </div>
+            </div>
+            <div class="col">
+                <img src="http://fahimbashar.com/staticfiles/images/icons/wind.png">
+                <div>
+                    <p class="wind">15 mph</p>
+                    <p>Wind Speed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+const apiKey = "FAKEAPI"
+
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q="
+
+const searchBar = document.querySelector(".search input")
+const searchBtn = document.querySelector(".search button")
+const weatherIcon = document.querySelector(".weather-icon")
+
+async function checkWeather(city)
+{
+    const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+    var data = await response.json();
+
+
+    document.querySelector(".city").innerHTML = data.name + ", " + data.sys.country
+    document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°c"
+    document.querySelector(".humidity").innerHTML = data.main.humidity + "%"
+    document.querySelector(".wind").innerHTML = data.wind.speed + " kph"
+
+    switch(data.weather[0].main)
+    {
+        case "Clouds":
+            weatherIcon.src = "http://fahimbashar.com/staticfiles/images/icons/clouds.png"
+            break
+        case "Clear":
+            weatherIcon.src = "http://fahimbashar.com/staticfiles/images/icons/clear.png"
+            break
+        case "Rain":
+            weatherIcon.src = "http://fahimbashar.com/staticfiles/images/icons/rain.png"
+            break
+        case "Drizzle":
+            weatherIcon.src = "http://fahimbashar.com/staticfiles/images/icons/drizzle.png"
+            break
+        case "Mist":
+            weatherIcon.src = "http://fahimbashar.com/staticfiles/images/icons/mist.png"
+            break
+        case "Snow":
+            weatherIcon.src = "http://fahimbashar.com/staticfiles/images/icons/snow.png"
+            break
+        
+    }
+
+    document.querySelector(".weather").style.display = "block"
+
+}
+
+searchBtn.addEventListener("click", () => {
+    checkWeather(searchBar.value);
+})
+</script>
+
+
+</body>
+
+
+</html>
